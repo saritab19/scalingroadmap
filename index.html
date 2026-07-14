@@ -682,6 +682,48 @@
             margin-bottom: 0.75rem;
         }
 
+        /* Wave and Phase styling */
+        .phase-container {
+            background: rgba(220, 182, 105, 0.08);
+            border-left: 4px solid var(--gold);
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-container h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-container p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--midnight);
+            margin-bottom: 1rem;
+        }
+
+        .phase-container ul {
+            margin: 1rem 0 0 1.5rem;
+            font-size: 15px;
+            line-height: 2;
+            color: var(--midnight);
+        }
+
+        .phase-container li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Wave section styling */
+        .wave-heading {
+            border-top: 3px solid var(--gold);
+            padding-top: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
         /* Investment table styling */
         .investment-table {
             width: 100%;
@@ -832,9 +874,10 @@
                         <h2>Architecting for Scale: Citizen's Enterprise Operating Model</h2>
                         <p>This proposal outlines how we'll build a scalable operating model for Citizen's operations. It diagnoses the structural gap, presents a methodology to address it, and details our implementation plan:</p>
                         <ol>
-                            <li><strong>Context & Division Vision:</strong> Where we are, what's broken, and why now</li>
-                            <li><strong>Operating Model Design:</strong> The methodology and a concrete example for Marketing Automation</li>
-                            <li><strong>Impact & Roadmap:</strong> How we implement this across the division</li>
+                            <li><strong>Where We Stand:</strong> Where we are, what's broken, and why now</li>
+                            <li><strong>Designing for Scale:</strong> The methodology and a concrete example for Marketing Automation</li>
+                            <li><strong>Building Together:</strong> How we design operating models in focused sprints</li>
+                            <li><strong>How We Implement It:</strong> The timeline and phases for executing operating model and system design work</li>
                         </ol>
                     </div>
                     <div class="concepts-grid" id="conceptsGrid"></div>
@@ -863,7 +906,7 @@
         const concepts = [
             {
                 id: 'context',
-                title: 'Context & Division Vision',
+                title: 'Where We Stand',
                 sections: [
                     {
                         heading: 'Where we are',
@@ -887,7 +930,7 @@
             },
             {
                 id: 'architecture',
-                title: 'Operating Model Design',
+                title: 'Designing for Scale',
                 sections: [
                     {
                         heading: 'The recommended approach: Top down methodology',
@@ -927,7 +970,7 @@
             },
             {
                 id: 'impact',
-                title: 'Implementing by Cohort',
+                title: 'Building Together',
                 sections: [
                     {
                         heading: 'Bringing It to Life',
@@ -995,7 +1038,52 @@
                         ]
                     }
                 ]
-            }
+            },
+        {
+            id: 'scaling',
+            title: 'How We Implement It',
+            sections: [
+                {
+                    heading: 'The Execution Model',
+                    content: 'Modules 1-3 laid the foundation: the gap we\'re addressing, the top-down methodology, and the sprint-based process for designing how we should work. This module shows how we execute and scale that work. Every wave follows a two-phase cycle.'
+                },
+                {
+                    heading: 'How the Cycle Works',
+                    subsections: [
+                        {
+                            subheading: 'Phase 1: Operating Model Design',
+                            content: 'Cohorts use the sprint process from Module 3 to define ideal workflows, identify data dependencies, and establish how departments should connect. This answers: How should we work? Outcome: Clear operating model showing what success looks like.'
+                        },
+                        {
+                            subheading: 'Phase 2: System Design',
+                            content: 'A systems person or team takes the operating model and determines what systems, integrations, or capabilities are needed to support it. This answers: How do we implement this? Outcome: System blueprint and implementation roadmap.'
+                        }
+                    ]
+                },
+                {
+                    heading: 'Wave 1: Client Onboarding',
+                    content: 'Client onboarding is foundational. Every department touches it. Getting it right establishes the data structure and workflows that everything else builds on.',
+                    subsections: [
+                        {
+                            subheading: 'Phase 1: Operating Model Design',
+                            content: '<p><strong>Timeline: ~5 months</strong></p><p style="margin-top: 1rem;"><strong>Breakdown:</strong></p><ul style="margin: 1rem 0 0 1.5rem; line-height: 2;"><li>Cohort 1: 4 weeks</li><li>Buffer & learnings consolidation: 2 weeks</li><li>Cohort 2: 4 weeks</li><li>Buffer & learnings consolidation: 2 weeks</li><li>Cohort 3: 4 weeks</li><li>Buffer & learnings consolidation: 2 weeks</li><li>Cohort 4: 4 weeks</li></ul><p style="margin-top: 1.5rem;"><strong>Deliverable: Operating Model</strong></p><p>Clear definition of how departments should work together. Includes ideal workflows, data dependencies, handoffs, and metrics for success.</p>'
+                        },
+                        {
+                            subheading: 'Phase 2: System Design',
+                            content: '<p><strong>Timeline: ~2-3 months</strong></p><p style="margin-top: 1rem;">Map operating model requirements to tech stack (Salesforce, Cloud Coach, GA4, ActiveDEMAND, FURTHER, and other tools). Identify gaps, needed integrations, and new capabilities required.</p><p style="margin-top: 1.5rem;"><strong>Deliverable: System Blueprint</strong></p><p>Roadmap showing what systems and tools are needed to support the operating model, what gaps exist, and implementation approach.</p>'
+                        },
+                        {
+                            subheading: 'Wave 1 Total Timeline',
+                            content: '~7-8 months from start to finish blueprint ready'
+                        }
+                    ]
+                },
+                {
+                    heading: 'Wave 2: Quarterly Optimizations',
+                    content: '<p>By now, managers understand the framework and methodology. They are equipped to lead optimization work independently.</p><p>Managers analyze their quarterly performance against the operating model, identify refinements and optimizations, and report findings back. Leadership consolidates patterns across departments and determines if system adjustments or new capabilities are needed.</p><p>This becomes ongoing, with managers increasingly self-sufficient and leadership playing a consolidation and decision-making role.</p>'
+                }
+            ]
+        }
         ];
 
         let currentView = 'main';
@@ -1206,7 +1294,7 @@
                     });
                     html += `</tbody></table></div>`;
                 } else if (section.subsections) {
-                    html += `<div class="section"><h3 class="section-heading">${section.heading}</h3>`;
+                    html += `<div class="section"><h3 class="section-heading ${section.heading.includes('Wave') ? 'wave-heading' : ''}">${section.heading}</h3>`;
                     
                     // Use role-cards grid for "How We Work Together"
                     if (section.heading.includes('How We Work Together')) {
@@ -1221,6 +1309,19 @@
                             `;
                         });
                         html += `</div>`;
+                    } else if (section.heading.includes('Wave')) {
+                        html += `<p class="section-content">${section.content}</p>`;
+                        section.subsections.forEach(sub => {
+                            // Apply phase-container styling for wave phases
+                            let cardClass = 'phase-container';
+                            
+                            html += `
+                                <div class="subsection ${cardClass}">
+                                    <h4 class="subsection-heading">${sub.subheading}</h4>
+                                    <p class="subsection-content">${sub.content}</p>
+                                </div>
+                            `;
+                        });
                     } else {
                         section.subsections.forEach(sub => {
                             // Apply cohort-card styling for cohorts, week-card for sprint weeks

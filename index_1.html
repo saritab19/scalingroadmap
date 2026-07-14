@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Framework</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --midnight: #2D0A2D;
+            --gold: #DCB669;
+            --opalite: #FFFEFE;
+        }
+
+        body {
+            font-family: 'Urbanist', system-ui, -apple-system, sans-serif;
+            background: var(--opalite);
+            color: var(--midnight);
+        }
+
+        .header {
+            height: 120px;
+            background: linear-gradient(to right, #2D0A2D 0%, #6b4469 40%, #9d7c6e 70%, #DCB669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo {
+            height: 60px;
+            width: auto;
+        }
+
+        .document-subtitle {
+            background: white;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid rgba(45, 10, 45, 0.1);
+            text-align: left;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--midnight);
+            font-family: 'Urbanist', inherit;
+        }
+
+        .main-content .document-subtitle {
+            margin: 0 auto 2rem auto;
+            max-width: 760px;
+            width: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .container {
+            display: flex;
+            gap: 0;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            width: 280px;
+            padding: 2rem 1rem;
+            background: white;
+            border-right: 1px solid var(--midnight);
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            position: sticky;
+            top: 120px;
+        }
+
+        .sidebar-back-button {
+            padding: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            border: 2px solid var(--midnight);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--midnight);
+            transition: all 0.2s ease;
+            font-family: 'Urbanist', inherit;
+            display: block;
+        }
+
+        .sidebar-back-button.hidden {
+            display: none;
+        }
+
+        .sidebar-back-button:hover {
+            background: var(--midnight);
+            color: white;
+            transform: translateX(-2px);
+            box-shadow: 0 4px 12px rgba(45, 10, 45, 0.15);
+        }
+
+        .sidebar-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--midnight);
+            opacity: 0.6;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .nav-button {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border: 2px solid var(--midnight);
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            color: var(--midnight);
+            font-family: 'Urbanist', inherit;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            height: 70px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            box-sizing: border-box;
+        }
+
+        .nav-button:hover:not(.active) {
+            background: rgba(45, 10, 45, 0.08);
+            border-color: var(--gold);
+            transform: translateX(2px);
+        }
+
+        .nav-button.active {
+            background: var(--midnight);
+            border: 2px solid var(--midnight);
+            font-weight: 700;
+            color: var(--gold);
+            box-shadow: 0 4px 12px rgba(45, 10, 45, 0.2);
+        }
+
+        .nav-button.active:hover {
+            background: var(--midnight);
+            border-color: var(--midnight);
+            box-shadow: 0 6px 16px rgba(45, 10, 45, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-button-index {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .nav-button-title {
+            font-weight: inherit;
+            line-height: 1.4;
+        }
+
+        .main-content {
+            flex: 1;
+            max-width: calc(100% - 280px);
+            width: calc(100% - 280px);
+            overflow-y: auto;
+        }
+
+        .mobile-nav-header {
+            display: none;
+            padding: 1rem 1.5rem;
+            justify-content: flex-end;
+            align-items: center;
+            background: white;
+            margin-bottom: 1rem;
+        }
+
+        .mobile-nav-header.show {
+            display: flex;
+        }
+        #mobileNavIndex {
+            display: none;
+        }
+
+        .mobile-nav-toggle {
+            padding: 0.5rem 1rem;
+            background: var(--midnight);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Urbanist', inherit;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-toggle:hover {
+            background: var(--midnight);
+            opacity: 0.9;
+        }
+
+        .mobile-sidebar {
+            display: none;
+            flex-direction: column;
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid var(--midnight);
+        }
+
+        .mobile-sidebar.open {
+            display: flex;
+        }
+
+        .view-main {
+            padding: 3rem 1.5rem;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .main-container {
+            background: white;
+            border-top: 6px solid var(--midnight);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-intro {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(45, 10, 45, 0.1);
+        }
+
+        .main-intro h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 1.5rem;
+        }
+
+        .main-intro p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--midnight);
+            margin-bottom: 1.5rem;
+        }
+
+        .main-intro ol {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--midnight);
+            margin-left: 1.5rem;
+        }
+
+        .main-intro li {
+            margin-bottom: 0.5rem;
+        }
+
+        .main-intro strong {
+            font-weight: 700;
+        }
+
+        .concepts-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .concept-button {
+            width: 100%;
+            padding: 1.5rem;
+            background: white;
+            border: 2px solid var(--midnight);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-family: 'Urbanist', inherit;
+            min-height: 100px;
+            gap: 1rem;
+        }
+
+        .concept-button:hover {
+            background: var(--midnight);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 10, 45, 0.15);
+        }
+
+        .concept-button:hover .concept-number,
+        .concept-button:hover .concept-title {
+            color: var(--gold);
+        }
+
+        .concept-button-content {
+            flex: 1;
+        }
+
+        .concept-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.25rem;
+            transition: color 0.2s ease;
+        }
+
+        .concept-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--midnight);
+            transition: color 0.2s ease;
+            line-height: 1.3;
+        }
+
+        .concept-arrow {
+            font-size: 24px;
+            color: var(--midnight);
+            transition: all 0.2s ease;
+        }
+
+        .concept-button:hover .concept-arrow {
+            color: var(--gold);
+            transform: translateX(4px);
+        }
+
+        .concept-divider {
+            height: 1px;
+            background: var(--midnight);
+            margin: 0.5rem 0;
+            opacity: 0.2;
+        }
+
+        .view-detail {
+            padding: 3rem 1.5rem;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .detail-container {
+            background: white;
+            border-top: 6px solid var(--midnight);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(45, 10, 45, 0.1);
+        }
+
+        .detail-index {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin: 0;
+        }
+
+        .module-title-header {
+            padding: 2rem 0 1.5rem 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin: 0;
+        }
+
+        .visual {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+
+        .visual-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            color: var(--midnight);
+        }
+
+        .visual svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .clearwater-box {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--midnight);
+        }
+
+        .clearwater-box-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.75rem;
+        }
+
+        .clearwater-box-desc {
+            font-size: 14px;
+            color: var(--midnight);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .clearwater-result {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+            background: var(--midnight);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .visual-note {
+            font-size: 14px;
+            color: var(--midnight);
+            font-style: italic;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+
+        .visual-footnote {
+            font-size: 12px;
+            color: var(--midnight);
+            opacity: 0.6;
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
+        .sections {
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section-heading {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 1rem;
+        }
+
+        .section-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--midnight);
+            margin-bottom: 1rem;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content ul {
+            margin: 1rem 0 0 1.5rem;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--midnight);
+        }
+
+        .section-content li {
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-box {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+            padding-right: 1.25rem;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+            border-left: 4px solid var(--gold);
+            background: rgba(45, 10, 45, 0.03);
+            border-radius: 6px;
+        }
+
+        .phase-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--midnight);
+            margin-bottom: 1rem;
+        }
+
+        .phase-bullets {
+            margin: 0;
+            padding-left: 1.75rem;
+            font-size: 15px;
+            margin-bottom: 1rem;
+            list-style-type: decimal;
+        }
+
+        .phase-bullets li {
+            margin-bottom: 0.5rem;
+            color: var(--midnight);
+        }
+
+        .phase-closing {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--midnight);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .phase-resource {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(220, 182, 105, 0.25);
+            font-size: 14px;
+            color: var(--midnight);
+        }
+
+        .phase-resource a {
+            color: var(--gold);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .phase-resource a:hover {
+            text-decoration: underline;
+        }
+
+        .subsection {
+            margin-bottom: 1.5rem;
+        }
+
+        .subsection-heading {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.5rem;
+        }
+
+        .subsection-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--midnight);
+        }
+
+        .subsection-list {
+            margin: 0;
+            padding-left: 1.5rem;
+            font-size: 15px;
+        }
+
+        .subsection-list li {
+            margin-bottom: 0.75rem;
+            padding-left: 0.75rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        /* Cohort cards */
+        .cohort-card {
+            background: linear-gradient(135deg, rgba(220, 182, 105, 0.08) 0%, rgba(45, 10, 45, 0.04) 100%);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cohort-card .subsection-heading {
+            color: var(--midnight);
+            font-size: 16px;
+            margin-bottom: 0.5rem;
+        }
+
+        .cohort-card-focus {
+            font-style: italic;
+            color: var(--midnight);
+            opacity: 0.9;
+            margin-top: 0.75rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        /* Week cards */
+        .section:has(.role-card) .section-heading {
+            margin-bottom: 1.5rem;
+        }
+
+        .role-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .role-card {
+            background: rgba(45, 10, 45, 0.03);
+            border-left: 4px solid var(--gold);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        /* Alternating role card colors */
+        .role-cards .role-card:nth-child(even) {
+            background: rgba(220, 182, 105, 0.04);
+        }
+
+        .role-card .subsection-heading {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 0.5rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .role-card .subsection-content {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--midnight);
+            margin: 0;
+        }
+
+        /* Week cards */
+        .week-card {
+            background: rgba(45, 10, 45, 0.03);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        /* Vertical arrow between week cards */
+        .week-card:not(:last-child)::after {
+            content: '↓';
+            position: absolute;
+            left: 50%;
+            bottom: -1.75rem;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Alternating week card colors */
+        .subsections .week-card:nth-child(even) {
+            background: rgba(220, 182, 105, 0.04);
+        }
+
+        .week-card .subsection-heading {
+            color: var(--midnight);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Investment table styling */
+        .investment-table {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-collapse: collapse;
+        }
+
+        .investment-table th {
+            background: var(--midnight);
+            color: var(--gold);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 14px;
+            border: none;
+        }
+
+        .investment-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(45, 10, 45, 0.1);
+            font-size: 15px;
+            color: var(--midnight);
+        }
+
+        .investment-table tbody tr:nth-child(odd) {
+            background: rgba(45, 10, 45, 0.02);
+        }
+
+        .investment-table tbody tr:nth-child(even) {
+            background: rgba(220, 182, 105, 0.04);
+        }
+
+        .investment-table strong {
+            font-weight: 700;
+            color: var(--midnight);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 0;
+            padding: 0 1.5rem 3rem 1.5rem;
+            max-width: 760px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-back {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: white;
+            border: 2px solid var(--midnight);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--midnight);
+            font-family: 'Urbanist', inherit;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .btn-back:hover {
+            background: var(--midnight);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 10, 45, 0.2);
+        }
+
+        .btn-next {
+            flex: 1;
+            padding: 1rem 2rem;
+            background: var(--midnight);
+            border: 2px solid var(--midnight);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'Urbanist', inherit;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .btn-next:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(45, 10, 45, 0.25);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 1023px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .mobile-nav-header.show {
+                display: flex;
+            }
+
+            .view-main,
+            .view-detail {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://ctznpartners.com/wp-content/uploads/2026/02/citizen-hp-nav-logo.png" alt="Citizen" class="header-logo">
+    </div>
+
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-back-button" onclick="showView('main')">← Back to overview</button>
+            <div class="sidebar-label">Modules</div>
+            <div id="sidebar-nav"></div>
+        </div>
+
+        <div class="main-content">
+            <div class="document-subtitle">
+                Architecting for Scale: Citizen's Enterprise Operating Model
+            </div>
+
+            <div class="mobile-nav-header" id="mobileNavHeader">
+                <div id="mobileNavIndex"></div>
+                <button class="mobile-nav-toggle" onclick="toggleMobileNav()">Open menu</button>
+            </div>
+
+            <div class="mobile-sidebar" id="mobileSidebar">
+                <button class="sidebar-back-button" onclick="showView('main')">← Back to overview</button>
+                <div id="mobile-nav"></div>
+            </div>
+
+            <div id="main-view" class="view-main">
+                <div class="main-container">
+                    <div class="main-intro">
+                        <h2>Architecting for Scale: Citizen's Enterprise Operating Model</h2>
+                        <p>This proposal outlines how we'll build a scalable operating model for Citizen's operations. It diagnoses the structural gap, presents a methodology to address it, and details our implementation plan:</p>
+                        <ol>
+                            <li><strong>Context & Division Vision:</strong> Where we are, what's broken, and why now</li>
+                            <li><strong>Operating Model Design:</strong> The methodology and a concrete example for Marketing Automation</li>
+                            <li><strong>Impact & Roadmap:</strong> How we implement this across the division</li>
+                        </ol>
+                    </div>
+                    <div class="concepts-grid" id="conceptsGrid"></div>
+                </div>
+            </div>
+
+            <div id="detail-view" class="view-detail hidden">
+                <div class="detail-container">
+                    <div class="detail-header">
+                        <div class="detail-index" id="detailIndex"></div>
+                    </div>
+                    <div class="module-title-header">
+                        <h2 class="module-title" id="moduleTitle"></h2>
+                    </div>
+                    <div id="detailContent"></div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-back" onclick="goBack()">← Back</button>
+                    <button class="btn-next" id="nextButton" onclick="goNext()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const concepts = [
+            {
+                id: 'context',
+                title: 'Context & Division Vision',
+                sections: [
+                    {
+                        heading: 'Where we are',
+                        content: 'Citizen is pursuing a $50M by 2030 vision as the premier senior living growth partner. We have built the teams, established the functional structure across SEO, Paid Media, and Marketing Automation, and created quarterly rocks tied to three year objectives. Today we operate across approximately 295 communities, serving enterprise operators with 5 or more properties each. We have strategic clarity. What we are building now is the operational infrastructure to execute that strategy without a proportional increase in headcount.'
+                    },
+                    {
+                        heading: 'What we are running on',
+                        content: 'POD has already built a successful SMB playbook: one strategist, one client, one property. We multiplied it to support our growth, but the cracks are showing. An enterprise operator with 17 communities buying five products creates 85 isolated projects instead of one coordinated operating model. Monthly optimizations for 100 communities require 100 separate manual tasks instead of a single, systematic production cycle. We are managing enterprise complexity using rigid SMB infrastructure.',
+                        visual: 'clearwater'
+                    },
+                    {
+                        heading: 'The gap',
+                        content: 'While we have strong talent, clear strategy, and solid tools, our growth is constrained by architecture, not capacity or execution. Our audit challenges reveal that we\'re running complex, multi-property workflows on systems designed for simpler operations. The structural gap isn\'t about what we do. It\'s about how we\'ve organized the data and workflows that support it. We need a foundational operating model that structures data and workflows for scale before tasks are assigned, not after.',
+                        visual: 'hierarchy'
+                    },
+                    {
+                        heading: 'Why this moment matters',
+                        content: 'We have passed the scale inflection point. We cannot hire our way out of structural inefficiency, nor can we patch it with process tweaks. We must design from the operating model first. Once the operating model is architected to handle multi-property inheritance patterns, our data requirements become clear, and our tool configuration follows naturally. This is our opportunity to begin that work.'
+                    }
+                ]
+            },
+            {
+                id: 'architecture',
+                title: 'Operating Model Design',
+                sections: [
+                    {
+                        heading: 'The recommended approach: Top down methodology',
+                        intro: 'Most of us naturally think bottom-up: "Here\'s what we do, how can we improve it?" This approach works differently. We start from the desired outcome and work downward to build the foundation needed to support it. Instead of optimizing existing processes, we define what success looks like at scale, determine how to measure it, then design the data structure and workflows that make it possible. This intentional shift ensures we build infrastructure aligned with strategy, not the reverse.',
+                        methodology: [
+                            { title: 'Define the Ideal Outcome', desc: 'What does ideal execution look like at scale? Example: If you have to do this for 40 clients, what would be the ideal way?' },
+                            { title: 'Determine Metrics', desc: 'How do we know we\'re achieving it?' },
+                            { title: 'Build Data Model', desc: 'What information structure supports those metrics?' },
+                            { title: 'Design Workflows', desc: 'What processes support this structure?' }
+                        ]
+                    },
+                    {
+                        heading: 'Applied Example: Scalable Content Library for Marketing Automation',
+                        subsections: [
+                            {
+                                subheading: 'Goal/Success',
+                                content: 'Deploy personalized campaigns to any community in days, not weeks. Reuse proven content templates across all properties. Quickly identify which topics drive results, then optimize at scale.'
+                            },
+                            {
+                                subheading: 'Metrics',
+                                content: 'Stage-advance rate (did the content move people forward?). Content performance by topic, level of care, and audience. Days from strategy approval to live campaign. Which topics and combinations drive move-ins?'
+                            },
+                            {
+                                subheading: 'Data Model',
+                                content: 'Content library organized by: Topic/Category, Level of Care (Independent/Assisted/Memory), Audience (Self/Adult Child), Eligible Stage (New Inquiry/Connected/Tour Booked/Post-Tour), and Goal/Action. Community profile data (demographics, market, property type, occupancy) injects into templates so each community gets personalized, on-brand content.'
+                            },
+                            {
+                                subheading: 'Workflows',
+                                content: 'Strategist completes customer journey workshop to understand client topics. For each stage, they select: topic/goal from library options. Present strategy table for approval. Prompt content app to generate personalized emails for that community, pulling templates and injecting local context. Track performance and optimize quarterly.'
+                            }
+                        ]
+                    },
+                    {
+                        visual: 'contentStrategyDiagram'
+                    }
+                ]
+            },
+            {
+                id: 'impact',
+                title: 'Implementing by Cohort',
+                sections: [
+                    {
+                        heading: 'Bringing It to Life',
+                        content: 'With this methodology in place, we now move into execution. Here\'s how we\'ll bring this framework to life across Citizen by working in focused cohorts.'
+                    },
+                    {
+                        heading: 'How We Work Together',
+                        content: '<p>Every sprint has a Sprint Owner. This is the person leading the sprint and responsible for consolidating, analyzing, and redesigning the scalable process. The Sprint Owner creates a shared document for the cohort where all department managers work together. The document includes Current State, Pain Points, Ideal State, and Gaps for each department.</p><p>In this document, managers can see each other\'s workflows, metrics, and data requirements side by side. As department managers contribute their specific details, the Sprint Owner consolidates the input into a unified model that shows how all the pieces connect and where dependencies exist. By the end of the sprint, the cohort has a shared operating model that reflects how they actually work together.</p><p>Then, the management team decides the next steps:</p><ul style="margin: 1rem 0 0 1.5rem;"><li>Are we building a prototype or MVP?</li><li>Do we need to present this to head office to update software?</li><li>Have we identified we need new software?</li><li>The process is already optimized for scale, no next steps needed.</li></ul>',
+                        subsections: [
+                            {
+                                subheading: 'Sprint Owner',
+                                content: 'Leads the sprint and is responsible for consolidating, analyzing, and redesigning the scalable process. Creates and manages the shared cohort document. Identifies data handoffs, bottlenecks, and dependencies across departments.'
+                            },
+                            {
+                                subheading: 'Department Managers',
+                                content: 'Provides design, context, and feedback when cohort is active. Contributes specific details about their department\'s current state, pain points, and ideal outcomes to the shared document.'
+                            },
+                            {
+                                subheading: 'Director of Operations',
+                                content: 'Provides strategic oversight and final approval on all operating model designs. Ensures alignment with division-wide goals and authorizes implementation timelines and next steps.'
+                            }
+                        ]
+                    },
+                    {
+                        heading: 'The Sprint Rhythm',
+                        content: 'By organizing around focused cohorts and rolling 4-week sprints, we prioritize redesign based on roadblocks and business impact, rather than trying to overhaul everything simultaneously. Each cohort gets a dedicated month where the Sprint Owner\'s full attention is directed toward their specific workflows and data dependencies. This approach keeps the operational load sustainable: inactive cohorts know they\'re not needed that month, while active cohorts get focused support. The Sprint Owner goes deep on complex, interdependent workflows instead of context-switching across eight departments at once. It also allows us to learn and iterate. Patterns from Cohort 1 inform Cohort 2, and by Cohort 3, we have a proven process others can follow.'
+                    },
+                    {
+                        heading: 'The 4-Week Sprint Schedule',
+                        content: 'When a cohort is active, the managers and Sprint Owner work inside a shared operating model document where they edit and contribute together. Each sprint follows a consistent rhythm:',
+                        subsections: [
+                            {
+                                subheading: 'Week 1: Document Gathering (15 mins for Active Managers)',
+                                content: 'Managers provide existing SOPs or complete the Facilitation Guide framework to map their current state, pain points, and ideal outcomes. The Sprint Owner collects this input and begins identifying data handoffs and bottlenecks across the cohort.'
+                            },
+                            {
+                                subheading: 'Week 2: The Top-Down Matrix (30 mins for Active Managers)',
+                                content: 'Managers review and refine the framework output, translating it into Goal, Metrics, and Inputs. The Sprint Owner aligns data fields and identifies overlaps and dependencies across departments.'
+                            },
+                            {
+                                subheading: 'Week 3: System Consolidation (Collaborative Review)',
+                                content: 'Managers review the unified model showing how all departments connect. They leave comments, suggest adjustments, and identify process improvements. The Sprint Owner consolidates feedback and finalizes the operating model.'
+                            },
+                            {
+                                subheading: 'Week 4: Review & Sign-Off (60 mins for Active Managers)',
+                                content: 'Managers attend a single, 1-hour live meeting to review the final operating model, make final adjustments, and approve the blueprint. The management team then decides next steps: prototype or MVP, software updates needed, new software required, or no action needed.'
+                            }
+                        ]
+                    },
+                    {
+                        heading: 'The Proposed Cohorts',
+                        content: 'Departments should be grouped by how closely their data and workflows overlap. Below are suggested cohorts based on functional relationships, but the team will finalize them together in alignment sessions before each sprint kicks off. All cohorts start with the same outcome: mapping out client onboarding triggers and the handoffs that make each department\'s work possible.<ul style="margin: 1.5rem 0 0 1.5rem; font-size: 15px; line-height: 1.8;"><li><strong>Cohort 1:</strong> Sales and Account Project Managers</li><li><strong>Cohort 2:</strong> Paid Media and Automation</li><li><strong>Cohort 3:</strong> SEO, Organic Social Media, and Websites</li><li><strong>Cohort 4:</strong> Direct Mail & Print</li></ul>'
+                    },
+                    {
+                        heading: 'Time Investment (Per Active Cohort)',
+                        subsections: [
+                            {
+                                subheading: 'Active Department Managers',
+                                content: 'Roughly 3 to 4 hours per month (only during their cohort\'s active month)'
+                            },
+                            {
+                                subheading: 'Sprint Owner',
+                                content: 'Roughly 20 to 24 hours per cohort (approximately 5 to 6 hours per week during active sprints)'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        let currentView = 'main';
+        let currentConceptIndex = 0;
+        let history = [];
+        let conceptHistory = [];
+
+        function init() {
+            renderConceptsGrid();
+            renderNavigation();
+            // Hide back button on initial load since we start on main view
+            const backButtons = document.querySelectorAll('.sidebar-back-button');
+            backButtons.forEach(btn => {
+                btn.classList.add('hidden');
+            });
+            // Hide subtitle on initial load since we start on main view
+            const subtitle = document.querySelector('.document-subtitle');
+            if (subtitle) {
+                subtitle.style.display = 'none';
+            }
+        }
+
+        function renderConceptsGrid() {
+            const grid = document.getElementById('conceptsGrid');
+            grid.innerHTML = concepts.map((concept, idx) => `
+                <button class="concept-button" onclick="navigateToModule('${concept.id}')">
+                    <div class="concept-button-content">
+                        <div class="concept-number">${idx + 1} of ${concepts.length}</div>
+                        <div class="concept-title">${concept.title}</div>
+                    </div>
+                    <div class="concept-arrow">→</div>
+                </button>
+                ${idx < concepts.length - 1 ? '<div class="concept-divider"></div>' : ''}
+            `).join('');
+        }
+
+        function renderNavigation() {
+            const sidebarNav = document.getElementById('sidebar-nav');
+            const mobileNav = document.getElementById('mobile-nav');
+            const navHTML = concepts.map((concept, idx) => `
+                <button class="nav-button ${currentConceptIndex === idx && currentView === 'detail' ? 'active' : ''}" onclick="navigateToModule('${concept.id}')">
+                    <div class="nav-button-index">${idx + 1}</div>
+                    <div class="nav-button-title">${concept.title}</div>
+                </button>
+            `).join('');
+            sidebarNav.innerHTML = navHTML;
+            mobileNav.innerHTML = navHTML;
+        }
+
+        function navigateToModule(conceptId) {
+            // Track current concept if we're in detail view
+            if (currentView === 'detail') {
+                conceptHistory.push(concepts[currentConceptIndex].id);
+            }
+            navigate(conceptId);
+        }
+
+        function navigate(conceptId) {
+            currentConceptIndex = concepts.findIndex(c => c.id === conceptId);
+            history.push(currentView);
+            showView('detail');
+            updateDetailView();
+            closeMobileNav();
+        }
+
+        function createClearwaterVisual() {
+            return `
+                <div class="visual">
+                    <div class="visual-title">Clearwater Senior Living Example</div>
+                    <div class="clearwater-box">
+                        <div class="clearwater-box-number">17 Communities</div>
+                        <div class="clearwater-box-desc">× 5 Products (SEO, PPC, Automation, Social Media, Memberships)</div>
+                        <div class="clearwater-result">= 85 Isolated Projects</div>
+                    </div>
+                    <svg viewBox="0 0 750 160" style="width: 100%; height: auto; margin-bottom: 1rem;">
+                        <text x="90" y="20" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">17 Communities</text>
+                        ${[...Array(17)].map((_, i) => `
+                            <rect x="${35 + (i % 6) * 30}" y="${30 + Math.floor(i / 6) * 30}" width="26" height="26" fill="white" stroke="#2D0A2D" stroke-width="1.5" rx="3" />
+                        `).join('')}
+                        <text x="470" y="20" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="start">85 Isolated Projects</text>
+                        ${[...Array(60)].map((_, i) => `
+                            <rect x="${470 + (i % 10) * 17}" y="${30 + Math.floor(i / 10) * 17}" width="15" height="15" fill="#DCB669" stroke="#2D0A2D" stroke-width="0.7" rx="2" opacity="0.6" />
+                        `).join('')}
+                        <text x="720" y="145" font-size="11" font-weight="700" fill="#2D0A2D" text-anchor="middle">...</text>
+                    </svg>
+                    <div class="visual-note">Current system: each community-product combination is a separate project, duplicating work and creating manual overhead.</div>
+                    <div class="visual-footnote">Note: For visualization purposes. Actual project counts may vary by operator.</div>
+                </div>
+            `;
+        }
+
+        function createHierarchyVisual() {
+            return `
+                <div class="visual">
+                    <div class="visual-title">Why the Operating Model Comes First</div>
+                    <svg viewBox="0 0 500 350" style="width: 100%; height: auto; max-width: 400px; margin: 0 auto; display: block;">
+                        <rect x="100" y="20" width="300" height="70" fill="white" stroke="#2D0A2D" stroke-width="2" rx="8" />
+                        <text x="250" y="60" font-size="16" font-weight="700" fill="#2D0A2D" text-anchor="middle">Operating Model</text>
+                        <text x="250" y="80" font-size="12" fill="#2D0A2D" opacity="0.7" text-anchor="middle">How we work at scale</text>
+                        <line x1="250" y1="90" x2="250" y2="120" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="250,120 245,110 255,110" fill="#2D0A2D" />
+                        <rect x="75" y="120" width="350" height="70" fill="white" stroke="#2D0A2D" stroke-width="2" rx="8" />
+                        <text x="250" y="160" font-size="16" font-weight="700" fill="#2D0A2D" text-anchor="middle">Data Inheritance Patterns</text>
+                        <text x="250" y="180" font-size="12" fill="#2D0A2D" opacity="0.7" text-anchor="middle">What data matters and how it flows</text>
+                        <line x1="250" y1="190" x2="250" y2="220" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="250,220 245,210 255,210" fill="#2D0A2D" />
+                        <rect x="50" y="220" width="400" height="70" fill="white" stroke="#2D0A2D" stroke-width="2" rx="8" />
+                        <text x="250" y="260" font-size="16" font-weight="700" fill="#2D0A2D" text-anchor="middle">Tool Automation & Configuration</text>
+                        <text x="250" y="280" font-size="12" fill="#2D0A2D" opacity="0.7" text-anchor="middle">Salesforce, ActiveDEMAND, warehouse configuration</text>
+                    </svg>
+                    <div class="visual-note" style="text-align: center;">Define the operating model first. Data needs and tool decisions follow naturally.</div>
+                </div>
+            `;
+        }
+
+        function createContentStrategyDiagram() {
+            return `
+                <div class="visual">
+                    <svg viewBox="0 0 700 200" style="width: 100%; height: auto;">
+                        <rect x="20" y="60" width="130" height="50" fill="white" stroke="#2D0A2D" stroke-width="2" rx="6" />
+                        <text x="85" y="85" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Customer</text>
+                        <text x="85" y="100" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Journey</text>
+                        <line x1="150" y1="85" x2="180" y2="85" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="180,85 170,80 170,90" fill="#2D0A2D" />
+                        <rect x="180" y="60" width="110" height="50" fill="white" stroke="#2D0A2D" stroke-width="2" rx="6" />
+                        <text x="235" y="80" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Select</text>
+                        <text x="235" y="95" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Topic/Goal</text>
+                        <line x1="290" y1="85" x2="320" y2="85" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="320,85 310,80 310,90" fill="#2D0A2D" />
+                        <rect x="320" y="60" width="110" height="50" fill="white" stroke="#2D0A2D" stroke-width="2" rx="6" />
+                        <text x="375" y="80" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Generate</text>
+                        <text x="375" y="95" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Emails</text>
+                        <line x1="430" y1="85" x2="460" y2="85" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="460,85 450,80 450,90" fill="#2D0A2D" />
+                        <rect x="460" y="60" width="110" height="50" fill="white" stroke="#2D0A2D" stroke-width="2" rx="6" />
+                        <text x="515" y="80" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Send &</text>
+                        <text x="515" y="95" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Measure</text>
+                        <line x1="570" y1="85" x2="600" y2="85" stroke="#2D0A2D" stroke-width="2" />
+                        <polygon points="600,85 590,80 590,90" fill="#2D0A2D" />
+                        <rect x="600" y="60" width="110" height="50" fill="white" stroke="#2D0A2D" stroke-width="2" rx="6" />
+                        <text x="655" y="80" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Track &</text>
+                        <text x="640" y="95" font-size="12" font-weight="700" fill="#2D0A2D" text-anchor="middle">Optimize</text>
+                        <line x1="515" y1="110" x2="515" y2="140" stroke="#DCB669" stroke-width="2" stroke-dasharray="5,5" />
+                        <rect x="450" y="140" width="130" height="40" fill="#DCB669" stroke="#2D0A2D" stroke-width="1.5" rx="4" opacity="0.2" />
+                        <text x="515" y="165" font-size="11" fill="#2D0A2D" text-anchor="middle" font-style="italic">+ Community Context Injected</text>
+                    </svg>
+                </div>
+            `;
+        }
+
+        function updateDetailView() {
+            const concept = concepts[currentConceptIndex];
+            document.getElementById('detailIndex').textContent = `${currentConceptIndex + 1} of ${concepts.length}`;
+            document.getElementById('moduleTitle').textContent = concept.title;
+
+            const detailContent = document.getElementById('detailContent');
+            let html = '<div class="sections">';
+
+            concept.sections.forEach(section => {
+                if (section.visual && !section.content && !section.methodology && !section.subsections && !section.roadmapPhases) {
+                    if (section.visual === 'clearwater') {
+                        html += createClearwaterVisual();
+                    }
+                    if (section.visual === 'hierarchy') {
+                        html += createHierarchyVisual();
+                    }
+                    if (section.visual === 'contentStrategyDiagram') {
+                        html += createContentStrategyDiagram();
+                    }
+                    return;
+                }
+
+                if (section.methodology) {
+                    html += `
+                        <div class="section">
+                            <h3 class="section-heading">${section.heading}</h3>
+                            <p class="section-content">${section.intro}</p>
+                            <div style="display: grid; gap: 1rem;">
+                    `;
+                    section.methodology.forEach(method => {
+                        html += `
+                            <div style="padding: 1rem; background: rgba(45, 10, 45, 0.03); border-left: 4px solid var(--gold); border-radius: 6px;">
+                                <h4 style="font-weight: 700; margin-bottom: 0.5rem;">${method.title}</h4>
+                                <p style="font-size: 15px; line-height: 1.6; color: var(--midnight);">${method.desc}</p>
+                            </div>
+                        `;
+                    });
+                    html += '</div></div>';
+                }
+
+                if (section.heading.includes('Time Investment') || section.heading.includes('Operational Investment')) {
+                    html += `<div class="section"><h3 class="section-heading">${section.heading}</h3>`;
+                    html += `<table class="investment-table">
+                        <thead>
+                            <tr>
+                                <th>Role</th>
+                                <th>Total Time Commit</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                    section.subsections.forEach(sub => {
+                        html += `
+                            <tr>
+                                <td><strong>${sub.subheading}</strong></td>
+                                <td>${sub.content}</td>
+                            </tr>
+                        `;
+                    });
+                    html += `</tbody></table></div>`;
+                } else if (section.subsections) {
+                    html += `<div class="section"><h3 class="section-heading">${section.heading}</h3>`;
+                    
+                    // Use role-cards grid for "How We Work Together"
+                    if (section.heading.includes('How We Work Together')) {
+                        html += `<div class="section-content">${section.content}</div>`;
+                        html += `<div class="role-cards">`;
+                        section.subsections.forEach(sub => {
+                            html += `
+                                <div class="subsection role-card">
+                                    <h4 class="subsection-heading">${sub.subheading}</h4>
+                                    <p class="subsection-content">${sub.content}</p>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    } else {
+                        section.subsections.forEach(sub => {
+                            // Apply cohort-card styling for cohorts, week-card for sprint weeks
+                            let cardClass = '';
+                            if (section.heading.includes('Proposed Cohorts') || sub.subheading.includes('Cohort')) {
+                                cardClass = 'cohort-card';
+                            } else if (sub.subheading.includes('Week')) {
+                                cardClass = 'week-card';
+                            }
+                            
+                            html += `
+                                <div class="subsection ${cardClass}">
+                                    <h4 class="subsection-heading">${sub.subheading}</h4>
+                                    <p class="subsection-content">${sub.content}</p>
+                                </div>
+                            `;
+                        });
+                    }
+                    html += '</div>';
+                }
+
+                if (section.roadmapPhases) {
+                    html += `<div class="section"><h3 class="section-heading">${section.heading}</h3><p class="section-content">${section.intro}</p>`;
+                    section.roadmapPhases.forEach(phase => {
+                        html += `
+                            <div class="phase-box">
+                                <div class="phase-title">${phase.phase}</div>
+                                <p class="phase-content">${phase.content}</p>
+                        `;
+                        if (phase.bullets) {
+                            html += `<ol class="phase-bullets">`;
+                            phase.bullets.forEach(bullet => {
+                                html += `<li>${bullet}</li>`;
+                            });
+                            html += `</ol>`;
+                        }
+                        if (phase.closing) {
+                            html += `<p class="phase-closing">${phase.closing}</p>`;
+                        }
+                        if (phase.resource) {
+                            html += `
+                                <div class="phase-resource">
+                                    <span style="font-style: italic; opacity: 0.8;">Resource: </span>
+                                    <a href="${phase.resource}" target="_blank" rel="noopener noreferrer">Phase 1 Thinking Framework</a>
+                                </div>
+                            `;
+                        }
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                }
+
+                if (section.content && !section.methodology && !section.subsections && !section.roadmapPhases) {
+                    html += `
+                        <div class="section">
+                            <h3 class="section-heading">${section.heading}</h3>
+                            <p class="section-content">${section.content}</p>
+                        </div>
+                    `;
+                }
+
+                if (section.visual === 'clearwater') {
+                    html += createClearwaterVisual();
+                }
+                if (section.visual === 'hierarchy') {
+                    html += createHierarchyVisual();
+                }
+                if (section.visual === 'contentStrategyDiagram') {
+                    html += createContentStrategyDiagram();
+                }
+            });
+
+            html += '</div>';
+            detailContent.innerHTML = html;
+
+            // Update next button
+            const nextButton = document.getElementById('nextButton');
+            if (currentConceptIndex < concepts.length - 1) {
+                nextButton.textContent = `Next: ${concepts[currentConceptIndex + 1].title} →`;
+                nextButton.classList.remove('hidden');
+            } else {
+                nextButton.classList.add('hidden');
+            }
+
+            // Update mobile nav
+            document.getElementById('mobileNavIndex').textContent = `${currentConceptIndex + 1} of ${concepts.length}`;
+            renderNavigation();
+        }
+
+        function showView(view) {
+            currentView = view;
+            document.getElementById('main-view').classList.toggle('hidden', view !== 'main');
+            document.getElementById('detail-view').classList.toggle('hidden', view !== 'detail');
+            document.getElementById('mobileNavHeader').classList.toggle('show', view !== 'main' && window.innerWidth < 1024);
+            
+            // Close mobile sidebar when returning to main
+            if (view === 'main') {
+                const sidebar = document.getElementById('mobileSidebar');
+                const button = document.querySelector('.mobile-nav-toggle');
+                sidebar.classList.remove('open');
+                button.textContent = 'Open menu';
+            }
+            
+            // Hide back button when on main view
+            const backButtons = document.querySelectorAll('.sidebar-back-button');
+            backButtons.forEach(btn => {
+                btn.classList.toggle('hidden', view === 'main');
+            });
+            
+            // Hide subtitle on main view only
+            const subtitle = document.querySelector('.document-subtitle');
+            if (subtitle) {
+                subtitle.style.display = view === 'main' ? 'none' : 'block';
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack() {
+            // If we're in detail view and have concept history, go back to previous concept
+            if (currentView === 'detail' && conceptHistory.length > 0) {
+                const prevConceptId = conceptHistory.pop();
+                currentConceptIndex = concepts.findIndex(c => c.id === prevConceptId);
+                updateDetailView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                renderNavigation();
+            } else if (history.length > 0) {
+                const prevView = history.pop();
+                showView(prevView);
+            } else {
+                showView('main');
+            }
+        }
+
+        function goNext() {
+            if (currentConceptIndex < concepts.length - 1) {
+                // Track current concept before navigating to next
+                conceptHistory.push(concepts[currentConceptIndex].id);
+                const nextConceptId = concepts[currentConceptIndex + 1].id;
+                currentConceptIndex = concepts.findIndex(c => c.id === nextConceptId);
+                updateDetailView();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                renderNavigation();
+            }
+        }
+
+        function toggleMobileNav() {
+            const sidebar = document.getElementById('mobileSidebar');
+            const button = document.querySelector('.mobile-nav-toggle');
+            sidebar.classList.toggle('open');
+            button.textContent = sidebar.classList.contains('open') ? 'Close menu' : 'Open menu';
+        }
+
+        function closeMobileNav() {
+            document.getElementById('mobileSidebar').classList.remove('open');
+            const button = document.querySelector('.mobile-nav-toggle');
+            if (button) button.textContent = 'Open menu';
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                closeMobileNav();
+            }
+        });
+    </script>
+</body>
+</html>
